@@ -30,7 +30,7 @@ class LineCircleRotatorView(ctx : Context) : View(ctx) {
 
     data class StateNode (var i : Int, var dir : Float = 0f, var scale : Float = 0f, var prevScale : Float = 0f) {
 
-        private var next : StateNode? = null
+        var next : StateNode? = null
 
         private var prev : StateNode? = null
 
@@ -111,8 +111,19 @@ class LineCircleRotatorView(ctx : Context) : View(ctx) {
 
         var curr : StateNode = root
 
-        fun draw(canvas : Canvas, paint : Paint) {
 
+        fun draw(canvas : Canvas, paint : Paint) {
+            val w : Float = canvas.width.toFloat()
+            val h : Float = canvas.height.toFloat()
+            var h1 : Float = h/2 * root.scale
+            var h2 : Float = h/2 * (root?.next?.next?.scale?:0f)
+            var deg : Float = 180f * (root?.next?.next?.scale?:0f)
+            canvas.save()
+            canvas.translate(w/2, h1)
+            canvas.rotate(deg)
+            canvas.drawLine(-w/10, (h/2 - h1) + h2, w/10, (h/2 - h1) + h2, paint)
+            canvas.drawCircle(0f, -h/2 + h1 - h2, w/10, paint)
+            canvas.restore()
         }
 
         fun update(stopcb : (Float) -> Unit) {
