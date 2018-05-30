@@ -4,6 +4,7 @@ package com.anwesh.uiprojects.linecirclerotatorview
  * Created by anweshmishra on 31/05/18.
  */
 
+import android.app.Activity
 import android.content.Context
 import android.view.View
 import android.view.MotionEvent
@@ -165,6 +166,13 @@ class LineCircleRotatorView(ctx : Context) : View(ctx) {
             lcr.startUpdating {
                 animator.stop()
             }
+        }
+    }
+
+    companion object {
+        fun create(activity : Activity) {
+            val view : LineCircleRotatorView = LineCircleRotatorView(activity)
+            activity.setContentView(view)
         }
     }
 }
