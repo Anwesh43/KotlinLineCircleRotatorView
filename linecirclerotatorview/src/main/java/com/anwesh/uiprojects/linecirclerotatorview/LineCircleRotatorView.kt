@@ -118,6 +118,8 @@ class LineCircleRotatorView(ctx : Context) : View(ctx) {
             var h1 : Float = h/2 * root.scale
             var h2 : Float = h/2 * (root?.next?.next?.scale?:0f)
             var deg : Float = 180f * (root?.next?.next?.scale?:0f)
+            paint.strokeWidth = Math.min(w, h) / 50
+            paint.strokeCap = Paint.Cap.ROUND
             canvas.save()
             canvas.translate(w/2, h1)
             canvas.rotate(deg)
@@ -137,6 +139,30 @@ class LineCircleRotatorView(ctx : Context) : View(ctx) {
 
         fun startUpdating(startcb : () -> Unit) {
             curr.startUpdating(startcb)
+        }
+    }
+
+    data class Renderer(var view : View, var animated: Boolean = false) {
+
+        private val animator : Animator = Animator(view)
+
+        private val lcr : LinkedCircleRotator = LinkedCircleRotator(0)
+
+        fun draw(canvas : Canvas, paint : Paint) {
+            canvas.drawColor(Color.parseColor("#212121"))
+            paint.color = Color.parseColor("#2ecc71")
+            lcr.draw(canvas, paint)
+            animator.animate {
+                lcr.startUpdating {
+                    animator.stop()
+                }
+            }
+        }
+
+        fun handleTap() {
+            lcr.startUpdating {
+                animator.stop()
+            }
         }
     }
 }
