@@ -102,4 +102,30 @@ class LineCircleRotatorView(ctx : Context) : View(ctx) {
             }
         }
     }
+
+    data class LinkedCircleRotator(var i : Int) {
+
+        var dir : Int = 1
+
+        val root : StateNode = StateNode(0)
+
+        var curr : StateNode = root
+
+        fun draw(canvas : Canvas, paint : Paint) {
+
+        }
+
+        fun update(stopcb : (Float) -> Unit) {
+            curr.update {
+                curr = curr.getNext(dir) {
+                    this.dir *= -1
+                }
+                stopcb(it)
+            }
+        }
+
+        fun startUpdating(startcb : () -> Unit) {
+            curr.startUpdating(startcb)
+        }
+    }
 }
